@@ -1,0 +1,37 @@
+/**
+ * 16-way demultiplexor:
+ * {a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p} =
+ *                            {in, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} if sel == 0000
+ *                            {0, in, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} if sel == 0001
+ *                            etc.
+ *                            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1} if sel == 1111
+ */
+
+CHIP DMux16Way {
+    IN in, sel[4];
+    OUT a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p;
+
+    PARTS:
+    DMux(in=in, sel=sel[3], a=x, b=y);
+
+    DMux8Way(in=x, sel[2]=sel[2], sel[1]=sel[1], sel[0]=sel[0], a=a, b=b, c=c, d=d, e=e, f=f, g=g, h=h);
+
+    DMux8Way(in=y, sel[2]=sel[2], sel[1]=sel[1], sel[0]=sel[0], a=i, b=j, c=k, d=l, e=m, f=n, g=o, h=p);
+    
+
+}
+//   Trail (failed)
+//   DMux(in=x, sel=sel[2], a=a, b=b);
+//   DMux(in=y, sel=sel[2], a=c, b=d);
+//   DMux(in=a, sel=sel[1], a=aa, b=bb);
+//   DMux(in=b, sel=sel[1], a=cc, b=dd);
+//   DMux(in=c, sel=sel[1], a=ee, b=ff);
+//   DMux(in=d, sel=sel[1], a=gg, b=hh);
+//   DMux(in=aa, sel=sel[0], a=a, b=b);
+//   DMux(in=bb, sel=sel[0], a=c, b=d);
+//   DMux(in=cc, sel=sel[0], a=e, b=f);
+//   DMux(in=dd, sel=sel[0], a=g, b=h);
+//   DMux(in=ee, sel=sel[0], a=i, b=j);
+//   DMux(in=ff, sel=sel[0], a=k, b=l);
+//   DMux(in=gg, sel=sel[0], a=m, b=n);
+//   DMux(in=hh, sel=sel[0], a=o, b=p);

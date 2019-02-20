@@ -1,0 +1,15 @@
+
+/**
+ * Eq gate: 
+ * out = 1 if (a == b)
+ *       0 otherwise
+ */
+
+CHIP Eq {
+    IN a, b;
+    OUT out;
+
+    PARTS:
+    Xor(a=a, b=b, out=axorb);
+    Not(in=axorb, out=out);
+}
