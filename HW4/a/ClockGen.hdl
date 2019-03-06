@@ -11,5 +11,7 @@ CHIP ClockGen {
      OUT out;
 
      PARTS:
+     Not(in=dffout, out=dffin);
+     DFF(in = dffin, out=dffout, out=out);
 
 }
