@@ -5,13 +5,13 @@
 
 /**
  * The complete address space of the Hack computer's memory,
- * including RAM and memory-mapped I/O. 
+ * including RAM and memory-mapped I/O.
  * The chip facilitates read and write operations, as follows:
  *     Read:  out(t) = Memory[address(t)](t)
  *     Write: if load(t-1) then Memory[address(t-1)](t) = in(t-1)
- * In words: the chip always outputs the value stored at the memory 
- * location specified by address. If load==1, the in value is loaded 
- * into the memory location specified by address. This value becomes 
+ * In words: the chip always outputs the value stored at the memory
+ * location specified by address. If load==1, the in value is loaded
+ * into the memory location specified by address. This value becomes
  * available through the out output from the next time step onward.
  * Address space rules:
  * Only the upper 16K+8K+1 words of the Memory chip are used.
@@ -21,7 +21,7 @@
  *   must return a 0 value, regardless of whether load is 1 or 0
  * - don't worry about loading a bad value if address > 0x6001;
  *   ignore that complication; just make sure out=0 for these addresses
- * 
+ *
  * Access to any address in the range 0x4000-0x5FFF results in
  * accessing the screen memory map. Access to address 0x6000 results
  * in accessing the keyboard memory map. The behavior in these
@@ -35,4 +35,11 @@ CHIP Memory {
     OUT out[16];
 
     PARTS:
+    DMux(in=load, sel=address[14], a=loadRAM, b=loadScreen);
+
+    RAM16K(in=in, address=[0..13], load=loadRAM, out=ramOut);
+    Screen(in=in, address=[0..12], load=loadScreen, out=screenOut);
+    Keyboard(out=Keyboard); // 11
+
+    Mux4Way16(a=ramOut, b=ramOut, c=screenOut, d=Keyboard, sel=address[13..14], out=out);
 }
