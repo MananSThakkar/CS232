@@ -1,0 +1,18 @@
+/**
+ * A 16-bit counter with UP and DOWN Operations.
+ * if      (reset[t]==1) out[t+1] = 0
+ * else if (load[t]==1)  out[t+1] = in[t]
+ * else if (inc[t]==1)   out[t+1] = out[t] + 1  (integer addition)
+ * else                  out[t+1] = out[t]
+ */
+
+CHIP PC {
+    IN in[16], op[2],;
+    OUT out[16];
+
+    PARTS:
+    ALU(x=f, y[0]=true, zx=false, nx=true, zy=true, ny=true, f=true, no=true, out=outALU, zr=zr, ng=ng);
+    Mux16(a=in, b=false, sel=op[0], out=outMux1);
+    Mux16(a=outMux1, b=outALU, sel=op[1], out=outMux2);
+    Register(in=outMux2, load=true, out=out, out=f);
+}

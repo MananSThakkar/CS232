@@ -1,4 +1,4 @@
-// This file is part of www.nand2tetris.org
+// This file is part of https://nam05.safelinks.protection.outlook.com/?url=www.nand2tetris.org&amp;data=02%7C01%7Crb86613n%40pace.edu%7C6f5859d4247f430978d108d6b62f0e00%7C0799c53eca9a49e88901064a6412a41d%7C1%7C0%7C636896710553124528&amp;sdata=dfTveATvzXH3m8gfIGH3CLsC%2FRc08ZRDWZm4hF%2FO8vg%3D&amp;reserved=0
 // and the book "The Elements of Computing Systems"
 // by Nisan and Schocken, MIT Press.
 // File name: projects/05/CPU.hdl
@@ -41,20 +41,35 @@ CHIP CPU {
         pc[15];          // address of next instruction
 
     PARTS:
+    Not(in=instruction[15], out=isAInstruction);
+    Or(a=isAInstruction, b=instruction[5], out=Aload);
+    Mux16(a=instruction, b=ALUout, sel=instruction[15], out=MuxinA);
 
-    Mux16 (a=instruction, b=ALUOut, sel=instruction[15], out=ROMOutOrALUOut);
+    ARegister(in=MuxinA, load=Aload, out=Aout);
+    Or16(a=Aout, b=false, out[0..14]=addressM);  //addressM  
 
-        ARegister(in=ROMOutOrALUOut , load = instruction[3], out=AOut );
+    Mux16(a=Aout, b=inM, sel=instruction[12], out=MuxinALU);
+    And(a=instruction[15], b=instruction[4], out=Dload);
 
-        DRegister(in=ALUOut,load= instruction[3]  , out=DOut  );
+    DRegister(in=ALUout, load=Dload, out=Dout);
 
-        PC(in=AOut ,load=instruction[2],inc=true ,reset=reset ,out[0..14]=pc);
+    ALU(x=Dout, y=MuxinALU, zx=instruction[11], nx=instruction[10], zy=instruction[9],
+        ny=instruction[8], f=instruction[7], no=instruction[6], out=outM, out=ALUout,
+        zr=zr, ng=ng);    //outM
 
-        Mux16(a=AOut, b=inM[0..15], sel=instruction[15], out=AOutOrRAMOut);
+    And(a=instruction[15], b=instruction[3], out=writeM);  //Write to M
+    //jump
+    //  Not(in=zr, out=Nzr);
+    //  Not(in=ng, out=Nng);
+    //  And(a=Nzr, b=Nng, out=NotzrAndNotng);
 
-        ALU(x=DOut, y=AOutOrRAMOut, zx=instruction[11], nx=instruction[10],
-        zy=instruction[9], ny=instruction[8], f=instruction[7],
-        no=instruction[6], out=ALUOut, zr=ZRout, ng=NGout);
-        
+    Nor(a=zr, b=ng, out=ZRNorNG);
+    And(a=ZRNorNG, b=instruction[0], out=jgt);  //jump if great than zero.
+    And(a=zr, b=instruction[1], out=jeq);  //jump if equal to zero.
+    And(a=ng, b=instruction[2], out=jlt);  //jump if less than zero.
+    Or(a=jeq, b=jlt, out=jle); // jump if less than/or equal to zero.
+    Or(a=jle, b=jgt, out=jmp);
+    And(a=instruction[15], b=jmp, out=loadPC);
 
+    PC(in=Aout,  load=loadPC, inc=true, reset=reset, out[0..14]=pc);
 }
