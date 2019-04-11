@@ -6,11 +6,23 @@
 unsigned * get_bits(unsigned x,
                  unsigned start,
                  unsigned end) {
-    // YOUR CODE HERE
+
     // Returning NULL is a placeholder
     // get_bits dynamically allocates an array a and set a[i] = 1 when (i+start)-th bit
     // of x is 1, otherwise set a[i] = 0;
     // At last, get_bits returns the address of the array.
+
+    unsigned * a = (unsigned *)malloc((end - start + 1) * sizeof(int));
+    for(int i = 31; i >= start; i--){
+        x = a[i + start];
+        if (x == 1){
+            a[i] = 1;
+        }
+        else{
+            a[i] = 0;
+        }
+        return a;
+    }
     return NULL;
 }
 
@@ -24,7 +36,16 @@ void set_bits(unsigned * x,
     // No return value
     // v points to an array of at least (end-start+1) unsigned integers.
     // if v[i] == 0, then set (i+start)-th bit of x zero, otherwise, set (i+start)-th bit of x one.
-    
+   
+    v = (unsigned *)malloc((end - start + 1) *sizeof(int));
+    for(int i = 31; i >= start; i--){
+        if(v[i] == 0){
+            x[i + start] = 0;
+        }
+        else{
+            x[i + start] = 1;
+        }
+    }
 }
 
 // Flip the bits of x within range [start, end], in which both are inclusive.
@@ -32,7 +53,7 @@ void set_bits(unsigned * x,
 void flip_bits(unsigned * x,
               unsigned start,
               unsigned end) {
-    // YOUR CODE HERE
+    
 
 }
 
