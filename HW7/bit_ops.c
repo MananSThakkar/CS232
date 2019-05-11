@@ -36,11 +36,11 @@ void set_bits(unsigned * x,
     // No return value
     // v points to an array of at least (end-start+1) unsigned integers.
     // if v[i] == 0, then set (i+start)-th bit of x zero, otherwise, set (i+start)-th bit of x one.
-    for(int i = 0; i < end; i++){
+    v = (unsigned *)malloc((end - start + 1) *sizeof(int));
+    for(int i = 0; i <= end; i++){
         if(v[i] == 0){
             *x = *x ^ (0 << start);
-        }
-        if(v[i] == 1){
+        }else{
             *x = *x ^ (1 << start);
         }
     }
@@ -52,7 +52,7 @@ void flip_bits(unsigned * x,
               unsigned start,
               unsigned end) {
     
-    *x = *x^(1<<start);
+    *x = *x ^ (1 << start);
 }
 
 
