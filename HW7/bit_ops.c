@@ -12,7 +12,7 @@ unsigned * get_bits(unsigned x,
     // of x is 1, otherwise set a[i] = 0;
     // At last, get_bits returns the address of the array.
 
-    unsigned * a = (unsigned *)malloc((end - start) * sizeof(int));
+    unsigned * a = (unsigned *)malloc((end - start + 1) * sizeof(int));
     for(int i = 31; i >= start; i--){
         x = a[i + start];
         if (x == 0){
