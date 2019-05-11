@@ -70,6 +70,7 @@ CHIP CPU {
     // Or(a=jle, b=jgt, out=jmp);
     // And(a=instruction[15], b=jmp, out=loadPC);
 
+    // update for resubmission
     And(a=instruction[15], b=instruction[0], out=jump1);
     And(a=instruction[15], b=instruction[1], out=jump2);
     And(a=instruction[15], b=instruction[2], out=jump3);
