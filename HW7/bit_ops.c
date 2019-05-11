@@ -12,18 +12,18 @@ unsigned * get_bits(unsigned x,
     // of x is 1, otherwise set a[i] = 0;
     // At last, get_bits returns the address of the array.
 
-    unsigned * a = (unsigned *)malloc((end - start + 1) * sizeof(int));
+    unsigned * a = (unsigned *)malloc((end - start) * sizeof(int));
     for(int i = 31; i >= start; i--){
         x = a[i + start];
-        if (x == 1){
-            a[i] = 1;
+        if (x == 0){
+            a[i] = 0;
         }
         else{
-            a[i] = 0;
+            a[i] = 1;
         }
         return a;
     }
-    return NULL;
+    return 0;
 }
 
 // Set the bits of x within range of [start, end], in which both are inclusive
@@ -36,7 +36,7 @@ void set_bits(unsigned * x,
     // No return value
     // v points to an array of at least (end-start+1) unsigned integers.
     // if v[i] == 0, then set (i+start)-th bit of x zero, otherwise, set (i+start)-th bit of x one.
-    v = (unsigned *)malloc((end - start + 1) *sizeof(int));
+    v = (unsigned *)malloc((end - start + 1) * sizeof(int));
     for(int i = 0; i <= end; i++){
         if(v[i] == 0){
             *x = *x ^ (0 << start);
