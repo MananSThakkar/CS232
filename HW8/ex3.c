@@ -6,7 +6,7 @@ int main () {
 
   /* Zero out the array */
   int letter_frequency[26] = {0};
-  int len, i;
+  int len, i = 0;
   char buf[MAX_BUF];
 
   puts("Type some text (then ENTER):");
